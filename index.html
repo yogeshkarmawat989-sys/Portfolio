@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yogesh Karmawat - Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- AOS Library for Animate on Scroll -->
+    <link href="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .hero-bg {
+            background-image: url('https://images.unsplash.com/photo-1596551323363-27814b7e930f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+        }
+        .hero-overlay {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+        .skill-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .skill-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            
+        }
+        .social-tray {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%) translateX(100%);
+            z-index: 100;
+            transition: transform 0.3s ease-in-out;
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem 0.5rem;
+            align-items: center;
+        }
+        .social-tray.is-open {
+            transform: translateY(-50%) translateX(0);
+        }
+        .social-tray-handle {
+            position: absolute;
+            top: 50%;
+            left: -40px;
+            transform: translateY(-50%);
+            background-color: rgba(31, 41, 55, 0.8);
+            border-top-left-radius: 9999px;
+            border-bottom-left-radius: 9999px;
+            padding: 10px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+        .social-tray-handle svg {
+            transition: transform 0.3s ease-in-out;
+        }
+        .social-tray.is-open .social-tray-handle svg {
+            transform: rotate(180deg);
+        }
+        .social-icon-wrapper {
+            transition: transform 0.1s ease-out;
+            position: relative;
+        }
+        .social-icon-wrapper:hover {
+            transform: scale(1.1);
+        }
+        .social-icon-wrapper .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 10px;
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translate(-100%, -50%);
+            white-space: nowrap;
+            z-index: 1;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+        .social-icon-wrapper:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s;
+        }
+        .modal.is-open {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: #1f2937;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            color: #e5e7eb;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        .about-bg {
+            background-image: radial-gradient(circle at 10% 50%, rgba(52, 211, 153, 0.1) 0%, rgba(31, 41, 55, 0.9) 80%);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-300 antialiased">
+
+    <!-- Social Media Tray -->
+    <div id="social-tray" class="social-tray">
+        <div id="social-tray-handle" class="social-tray-handle">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </div>
+        <div id="social-icons" class="flex flex-col space-y-4">
+            <a href="https://github.com/yogeshkarmawat989-sys" target="_blank" class="social-icon-wrapper text-white hover:text-green-400 transition-colors duration-300">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.6.11.82-.26.82-.577v-2.022c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.332-1.754-1.332-1.754-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.809 1.306 3.492.997.108-.775.418-1.306.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.381 1.236-3.221-.124-.3-.535-1.517.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.046.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.659.242 2.876.118 3.176.772.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.922.429.373.812 1.102.812 2.223v3.293c0 .319.215.69.825.577 4.767-1.587 8.205-6.085 8.205-11.385 0-6.627-5.373-12-12-12z"></path></svg>
+                <span class="tooltip">GitHub: yogeshkarmawat989-sys</span>
+            </a>
+            <a href="https://linkedin.com/in/yogesh-karmawat" target="_blank" class="social-icon-wrapper text-white hover:text-green-400 transition-colors duration-300">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.765 0-.974.784-1.765 1.75-1.765s1.75.791 1.75 1.765c0 .975-.784 1.765-1.75 1.765zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.761 7 2.476v6.759z"></path></svg>
+                <span class="tooltip">LinkedIn: Yogesh Karmawat</span>
+            </a>
+            <a href="https://www.instagram.com" target="_blank" class="social-icon-wrapper text-white hover:text-green-400 transition-colors duration-300">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.858.07.97.042 1.432.226 1.83.38.398.156.71.36.953.603.243.242.447.555.602.953.153.398.337.86.38 1.83.058 1.274.07 1.654.07 4.858s-.012 3.584-.07 4.858c-.042.97-.226 1.432-.38 1.83-.156.398-.36.71-.603.953-.242.243-.555.447-.953.602-.398.153-.86.337-1.83.38-1.274.058-1.654.07-4.858.07s-3.584-.012-4.858-.07c-.97-.042-1.432-.226-1.83-.38-.398-.156-.71-.36-.953-.603-.243-.242-.447-.555-.602-.953-.153-.398-.337-.86-.38-1.83-.058-1.274-.07-1.654-.07-4.858s.012-3.584.07-4.858c.042-.97.226-1.432.38-1.83.156-.398.36-.71.603-.953.242-.243.555-.447.953-.602.398-.153.86-.337 1.83-.38 1.274-.058 1.654-.07 4.858-.07zm0-2.163c-3.262 0-3.673.013-4.945.07c-1.258.055-2.071.26-2.614.471-.543.211-.969.497-1.397.925-.428.428-.714.881-.925 1.397-.211.543-.416 1.356-.471 2.614-.057 1.272-.07 1.683-.07 4.945s.013 3.673.07 4.945c.055 1.258.26 2.071.471 2.614.211.543.497.969.925 1.397.428.428.881.714 1.397.925.543.211 1.356.416 2.614.471 1.272.057 1.683.07 4.945.07s3.673-.013 4.945-.07c1.258-.055 2.071-.26 2.614-.471.543-.211.969-.497 1.397-.925.428-.428.714-.881.925-1.397-.428-.428-.881-.714-1.397-.925-.543-.211-1.356-.416-2.614-.471-1.272-.057-1.683-.07-4.945-.07z"></path></svg>
+                <span class="tooltip">Instagram</span>
+            </a>
+            <a href="https://twitter.com" target="_blank" class="social-icon-wrapper text-white hover:text-green-400 transition-colors duration-300">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.723-.951.564-2.005.974-3.127 1.195-.89-.944-2.158-1.54-3.561-1.54-3.322 0-6.007 2.684-6.007 6.007 0 .47.053.929.155 1.369-4.99-.252-9.434-2.64-12.408-6.289-.517.882-.816 1.907-.816 3.003 0 2.083 1.06 3.924 2.661 4.992-.986-.033-1.916-.304-2.724-.754v.075c0 2.915 2.074 5.344 4.823 5.91-.5.136-1.025.208-1.564.208-.381 0-.75-.037-1.11-.106.766 2.396 2.983 4.14 5.617 4.189-2.053 1.61-4.646 2.574-7.449 2.574-.484 0-.958-.029-1.424-.083 2.645 1.705 5.766 2.69 9.096 2.69 10.919 0 16.839-9.043 16.839-16.839 0-.256-.006-.511-.017-.765.969-.702 1.815-1.583 2.483-2.585z"></path></svg>
+                <span class="tooltip">Twitter</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Header & Navigation -->
+    <header class="absolute top-0 left-0 w-full py-4 px-6 md:px-12 z-50">
+        <div class="container mx-auto flex justify-between items-center text-white">
+            <nav class="hidden md:flex space-x-8">
+                <a href="#about" class="hover:text-green-400 transition-colors duration-300">About</a>
+                <a href="#skills" class="hover:text-green-400 transition-colors duration-300">Resume</a>
+                <a href="#projects" class="hover:text-green-400 transition-colors duration-300">Portfolio</a>
+                <a href="#contact" class="hover:text-green-400 transition-colors duration-300">Contact</a>
+            </nav>
+            <div class="md:hidden">
+                <button class="text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+            <div class="flex items-center space-x-4 text-sm font-semibold">
+                <span>2024bcacsbyogesh18772@poornima.edu.in</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-bg flex items-center justify-center text-white">
+            <div class="hero-overlay absolute inset-0"></div>
+            <div class="relative z-10 text-center md:text-left px-6 py-12 md:px-24">
+                <h1 class="text-6xl md:text-8xl font-extrabold leading-tight" data-aos="fade-up">
+                    YOGESH <br> KARMAWAT
+                </h1>
+                <p class="mt-4 text-xl md:text-3xl font-light tracking-wide" data-aos="fade-up" data-aos-delay="200">
+                    CYBERSECURITY PROFESSIONAL
+                </p>
+                <p class="mt-2 text-md italic" data-aos="fade-up" data-aos-delay="300">
+                    "The only truly safe computer is one that's unplugged, locked in a safe, and buried 20 feet under the ground in a secret location... and I'm not even sure about that one." - Gene Spafford
+                </p>
+                <div class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start" data-aos="fade-up" data-aos-delay="400">
+                    <a href="#skills" class="px-6 py-2 rounded-full border-2 border-white text-white hover:bg-white hover:text-gray-900 transition-colors duration-300">
+                        Resume
+                    </a>
+                    <a href="#projects" class="px-6 py-2 rounded-full border-2 border-white text-white hover:bg-white hover:text-gray-900 transition-colors duration-300">
+                        Portfolio
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-16 about-bg" data-aos="fade-up">
+            <div class="container mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 md:pr-8 mb-6 md:mb-0">
+                    <p class="text-green-400 font-semibold mb-2" data-aos="fade-right">ABOUT</p>
+                    <p class="text-sm mb-4" data-aos="fade-right" data-aos-delay="100">yogeshkarmawat989@gmail.com</p>
+                    <p id="bio-text" class="text-lg text-gray-400 leading-relaxed" data-aos="fade-right" data-aos-delay="200">
+                        Aspiring Cybersecurity Professional with strong fundamentals in ethical hacking, networking, and system security. Skilled in tools like Kali Linux, Wireshark, Nmap, Burp Suite, and John the Ripper. Proficient in Python, Java, and C with database knowledge in MySQL. Passionate about solving security challenges and continuously learning in the evolving field of cybersecurity.
+                    </p>
+                    <div class="mt-6 text-sm text-gray-400" data-aos="fade-right" data-aos-delay="300">
+                        <p>Sawai Madhopur, Rajasthan</p>
+                        <p>India</p>
+                    </div>
+                     <button id="readBioBtn" class="mt-4 px-6 py-2 rounded-full bg-green-500 text-gray-900 font-semibold hover:bg-green-400 transition-colors duration-300 shadow-md">
+                        ✨ Read My Bio
+                    </button>
+                </div>
+                <div class="md:w-1/2 flex justify-center items-center" data-aos="fade-left" data-aos-delay="400">
+                    <div class="relative w-64 h-64 md:w-80 md:h-80 rounded-xl overflow-hidden p-1 bg-gray-900 shadow-lg">
+                        <img src="https://i.ibb.co/8DB3Vcxr/PSP.jpg" alt="Yogesh Karmawat" class="w-full h-full object-cover rounded-xl border-4 border-gray-900">
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Skills, Education, Achievements Section -->
+        <section id="skills" class="py-16 bg-gray-800 text-white" data-aos="fade-up">
+            <div class="container mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                
+                <!-- Software Skills & Languages -->
+                <div data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="text-2xl font-bold mb-6">SOFTWARE SKILLS</h3>
+                    <ul class="space-y-4">
+                        <li class="skill-item">
+                             <img src="https://i.ibb.co/q3Fn5NQx/python.jpg" alt="Python" class="skill-icon">
+                            <span>Python</span>
+                        </li>
+                        <li class="skill-item">
+                            <img src="https://www.svgrepo.com/show/452234/java.svg" alt="Java" class="skill-icon">
+                            <span>Java</span>
+                        </li>
+                        <li class="skill-item">
+                            <img src="https://i.ibb.co/zWBwPrV2/c.png" alt="C" class="skill-icon">
+                            <span>C</span>
+                        </li>
+                        <li class="skill-item">
+                            <img src="https://www.svgrepo.com/show/452228/html-5.svg" alt="HTML" class="skill-icon">
+                            <span>HTML5</span>
+                        </li>
+                        <li class="skill-item">
+                            <img src="https://i.ibb.co/m593bCCk/css3.png" alt="CSS" class="skill-icon">
+                            <span>CSS3</span>
+                        </li>
+                    </ul>
+                    <h3 class="text-2xl font-bold mt-8 mb-6">LANGUAGES</h3>
+                    <ul class="space-y-4">
+                        <li class="skill-item">
+                            <span>Hindi</span>
+                        </li>
+                        <li class="skill-item">
+                            <span>English</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Education & Certifications -->
+                <div data-aos="fade-up" data-aos-delay="200">
+                    <h3 class="text-2xl font-bold mb-6">EXPERIENCE</h3>
+                    <div class="border-l-2 border-gray-500 pl-4 space-y-6">
+                        <div class="relative">
+                            <div class="absolute w-4 h-4 rounded-full bg-green-500 -left-6 top-0"></div>
+                            <p class="font-semibold text-white">No Professional Experience Listed</p>
+                            <p class="text-gray-400 text-sm">Will be updated soon.</p>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold mt-8 mb-6">EDUCATION</h3>
+                    <div class="border-l-2 border-gray-500 pl-4 space-y-6">
+                        <div class="relative">
+                            <div class="absolute w-4 h-4 rounded-full bg-green-500 -left-6 top-0"></div>
+                            <p class="font-semibold text-white">Poornima University</p>
+                            <p class="text-gray-400 text-sm">BCA - CyberSecurity (2024-2027)</p>
+                            <p class="text-gray-500 text-xs">CGPA: 6.84</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute w-4 h-4 rounded-full bg-green-500 -left-6 top-0"></div>
+                            <p class="font-semibold text-white">Kendriya Vidhyalaya</p>
+                            <p class="text-gray-400 text-sm">12th CBSE Board</p>
+                            <p class="text-gray-500 text-xs">Percentage: 78%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievements -->
+                <div data-aos="fade-up" data-aos-delay="300">
+                    <h3 class="text-2xl font-bold mb-6">ACHIEVEMENTS</h3>
+                    <ul class="space-y-4 text-gray-400">
+                        <li>Solved 100+ coding problems on HackerRank & GeeksforGeeks.</li>
+                        <li>Participated in CTF challenges to practice real-world security scenarios.</li>
+                        <li>Demonstrated ethical hacking practices such as port scanning & vulnerability testing.</li>
+                        <li>Google Cybersecurity Professional Certificate (In Progress)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-16 bg-gray-900" data-aos="fade-up">
+            <div class="container mx-auto px-6 md:px-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-10">PROJECTS</h2>
+                <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <!-- Project Card 1 -->
+                    <div class="project-card bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-700" data-aos="zoom-in" data-aos-delay="100">
+                        <img src="https://i.ibb.co/XkGfTGD9/jtr.png" alt="Password Cracking" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-white mb-2">Password Cracking with John the Ripper</h3>
+                            <p class="text-gray-400 mb-4">Demonstrated password security testing by using hash cracking techniques with the John the Ripper tool.</p>
+                            <button class="mt-4 w-full bg-green-500 text-gray-900 font-semibold rounded-md py-2 hover:bg-green-400 transition-colors duration-300" onclick="explainProject('Password Cracking with John the Ripper')">
+                                ✨ Explain This
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Project Card 2 -->
+                    <div class="project-card bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-700" data-aos="zoom-in" data-aos-delay="200">
+                        <img src="https://i.ibb.co/yKjHdKH/wrs.jpg" alt="Network Scanning" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-white mb-2">Network Scanning & Analysis</h3>
+                            <p class="text-gray-400 mb-4">Conducted in-depth port scanning and packet analysis using industry-standard tools like Nmap and Wireshark.</p>
+                            <button class="mt-4 w-full bg-green-500 text-gray-900 font-semibold rounded-md py-2 hover:bg-green-400 transition-colors duration-300" onclick="explainProject('Network Scanning & Analysis')">
+                                ✨ Explain This
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Project Card 3 -->
+                    <div class="project-card bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-700" data-aos="zoom-in" data-aos-delay="300">
+                        <img src="https://i.ibb.co/Fk93QjBG/xss-attact.jpg" alt="Web Vulnerability Testing" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-white mb-2">Web Vulnerability Testing</h3>
+                            <p class="text-gray-400 mb-4">Tested websites for common security flaws like Cross-Site Scripting (XSS) and SQL Injection using Burp Suite.</p>
+                            <button class="mt-4 w-full bg-green-500 text-gray-900 font-semibold rounded-md py-2 hover:bg-green-400 transition-colors duration-300" onclick="explainProject('Web Vulnerability Testing')">
+                                ✨ Explain This
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 bg-gray-900" data-aos="fade-up">
+            <div class="container mx-auto px-6 md:px-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-10">CONTACT</h2>
+                <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                    <form class="max-w-2xl mx-auto space-y-6" action="mailto:2024bcacsbyogesh18772@poornima.edu.in" method="post" enctype="text/plain">
+                        <div class="flex flex-col sm:flex-row space-y-6 sm:space-y-0 sm:space-x-6">
+                            <input type="text" name="Name" placeholder="Your Name" class="w-full p-4 bg-gray-900 border border-gray-700 rounded-md focus:outline-none focus:border-green-500">
+                            <input type="email" name="Email" placeholder="Your Email" class="w-full p-4 bg-gray-900 border border-gray-700 rounded-md focus:outline-none focus:border-green-500">
+                        </div>
+                        <input type="text" name="Subject" placeholder="Subject" class="w-full p-4 bg-gray-900 border border-gray-700 rounded-md focus:outline-none focus:border-green-500">
+                        <textarea name="Message" rows="5" placeholder="Your Message" class="w-full p-4 bg-gray-900 border border-gray-700 rounded-md focus:outline-none focus:border-green-500"></textarea>
+                        <div class="text-center">
+                            <button type="submit" class="px-8 py-3 rounded-full text-lg font-semibold bg-green-500 text-gray-900 hover:bg-green-400 transition-colors duration-300 shadow-md">
+                                Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-500 text-center py-6">
+        <p>&copy; 2024 Yogesh Karmawat. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Gemini Explainer Modal -->
+    <div id="explainerModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle" class="text-xl md:text-2xl font-bold mb-4"></h3>
+            <div id="modalContent">
+                <div class="animate-pulse flex space-x-4">
+                    <div class="flex-1 space-y-4 py-1">
+                        <div class="h-4 bg-gray-700 rounded w-3/4"></div>
+                        <div class="space-y-2">
+                            <div class="h-4 bg-gray-700 rounded"></div>
+                            <div class="h-4 bg-gray-700 rounded w-5/6"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Animations and Smooth Scrolling -->
+    <script>
+        AOS.init();
+    
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+    
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Social Tray Logic
+        const socialTray = document.getElementById('social-tray');
+        const socialTrayHandle = document.getElementById('social-tray-handle');
+        
+        socialTrayHandle.addEventListener('click', () => {
+            socialTray.classList.toggle('is-open');
+        });
+
+        // Function to convert Base64 to ArrayBuffer
+        function base64ToArrayBuffer(base64) {
+            const binary_string = window.atob(base64);
+            const len = binary_string.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binary_string.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        // Function to create a WAV blob from PCM data
+        function pcmToWav(pcmData, sampleRate) {
+            const buffer = new ArrayBuffer(44 + pcmData.length * 2);
+            const view = new DataView(buffer);
+            let offset = 0;
+
+            function writeString(str) {
+                for (let i = 0; i < str.length; i++) {
+                    view.setUint8(offset++, str.charCodeAt(i));
+                }
+            }
+
+            function writeUint32(val) {
+                view.setUint32(offset, val, true);
+                offset += 4;
+            }
+
+            function writeUint16(val) {
+                view.setUint16(offset, val, true);
+                offset += 2;
+            }
+
+            // RIFF chunk descriptor
+            writeString('RIFF');
+            writeUint32(36 + pcmData.length * 2);
+            writeString('WAVE');
+
+            // fmt sub-chunk
+            writeString('fmt ');
+            writeUint32(16); // sub-chunk size
+            writeUint16(1); // PCM audio format
+            writeUint16(1); // Mono
+            writeUint32(sampleRate);
+            writeUint32(sampleRate * 2); // Byte rate
+            writeUint16(2); // Block align
+            writeUint16(16); // Bits per sample
+
+            // data sub-chunk
+            writeString('data');
+            writeUint32(pcmData.length * 2);
+            for (let i = 0; i < pcmData.length; i++) {
+                view.setInt16(offset, pcmData[i], true);
+                offset += 2;
+            }
+
+            return new Blob([view], { type: 'audio/wav' });
+        }
+
+
+        // Gemini API TTS Logic
+        const bioText = document.getElementById('bio-text').textContent;
+        const readBioBtn = document.getElementById('readBioBtn');
+        let audio = null;
+        let isPlaying = false;
+
+        readBioBtn.addEventListener('click', async () => {
+            if (isPlaying) {
+                audio.pause();
+                audio.currentTime = 0;
+                isPlaying = false;
+                readBioBtn.textContent = '✨ Read My Bio';
+                return;
+            }
+
+            readBioBtn.textContent = 'Generating...';
+            readBioBtn.disabled = true;
+
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{
+                    parts: [{ text: bioText }]
+                }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        voiceConfig: {
+                            prebuiltVoiceConfig: { voiceName: "Fenrir" }
+                        }
+                    }
+                },
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error.message || `HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                const audioData = part?.inlineData?.data;
+                const mimeType = part?.inlineData?.mimeType;
+
+                if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                    const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+                    const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 16000;
+                    
+                    const pcmData = base64ToArrayBuffer(audioData);
+                    const pcm16 = new Int16Array(pcmData);
+                    const wavBlob = pcmToWav(pcm16, sampleRate);
+                    const audioUrl = URL.createObjectURL(wavBlob);
+
+                    audio = new Audio(audioUrl);
+                    audio.play();
+                    isPlaying = true;
+                    readBioBtn.textContent = 'Pause Reading';
+
+                    audio.onended = () => {
+                        isPlaying = false;
+                        readBioBtn.textContent = '✨ Read My Bio';
+                    };
+                } else {
+                    throw new Error("Invalid audio data from API.");
+                }
+
+            } catch (error) {
+                console.error("Error generating or playing audio:", error);
+                readBioBtn.textContent = 'Error';
+                setTimeout(() => readBioBtn.textContent = '✨ Read My Bio', 3000);
+            } finally {
+                readBioBtn.disabled = false;
+            }
+        });
+
+        // Gemini API Explainer Logic
+        const explainerModal = document.getElementById('explainerModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        const apiKey = ""; // Leave as-is. The environment will provide this.
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+        async function explainProject(projectTitle) {
+            // Show the modal and set the title
+            explainerModal.classList.add('is-open');
+            modalTitle.textContent = projectTitle;
+
+            // Show a loading state
+            modalContent.innerHTML = '<div class="animate-pulse flex space-x-4"><div class="flex-1 space-y-4 py-1"><div class="h-4 bg-gray-700 rounded w-3/4"></div><div class="space-y-2"><div class="h-4 bg-gray-700 rounded"></div><div class="h-4 bg-gray-700 rounded w-5/6"></div></div></div></div>';
+
+            const userQuery = `Explain the cybersecurity concept of "${projectTitle}" in simple terms, as if you're talking to a non-technical person. Focus on what it is and why it's important.`;
+            const systemPrompt = "You are a friendly and knowledgeable cybersecurity expert. Provide a concise, easy-to-understand explanation of the user's query.";
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                tools: [{ "google_search": {} }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                }
+            };
+
+            let response;
+            try {
+                // Exponential backoff for API calls
+                let retryCount = 0;
+                const maxRetries = 3;
+                while (true) {
+                    try {
+                        response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (response.status !== 429) { // 429 is Too Many Requests
+                            break;
+                        }
+                        if (retryCount >= maxRetries) {
+                            throw new Error('Max retries reached.');
+                        }
+                        const delay = Math.pow(2, retryCount) * 1000;
+                        await new Promise(res => setTimeout(res, delay));
+                        retryCount++;
+                    } catch (err) {
+                        if (retryCount >= maxRetries) {
+                            throw err;
+                        }
+                        const delay = Math.pow(2, retryCount) * 1000;
+                        await new Promise(res => setTimeout(res, delay));
+                        retryCount++;
+                    }
+                }
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error.message || `HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "No explanation found.";
+                modalContent.innerHTML = `<p class="text-gray-300 leading-relaxed">${text}</p>`;
+
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                modalContent.innerHTML = `<p class="text-red-400">Sorry, I couldn't get an explanation right now. Please try again later.</p>`;
+            }
+        }
+
+        function closeModal() {
+            explainerModal.classList.remove('is-open');
+        }
+    </script>
+</body>
+</html>
